@@ -1,5 +1,5 @@
 # musiccast-linker
-simple cli to enable musiccast link feature without touching your phone
+simple cli to enable yamaha musiccast link feature without touching your phone
 
 ## unsage 
 ````
