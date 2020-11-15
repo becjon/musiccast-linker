@@ -29,6 +29,11 @@ func (c *MusiccastClient) PowerOn(host, zone string) error {
 	return c.power(host, zone, "on")
 }
 
+func (c *MusiccastClient) PowerOff(host, zone string) error {
+	c.log.Infof("standby %s:%s", host, zone)
+	return c.power(host, zone, "standby")
+}
+
 func (c *MusiccastClient) power(host, zone, powerStatus string) error {
 	response, err := c.client.Get(fmt.Sprintf("http://%s/YamahaExtendedControl/v1/%s/setPower?power=%s", host, zone, powerStatus))
 	if err != nil {
