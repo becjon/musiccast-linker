@@ -31,8 +31,10 @@ func mainErr() error {
 			return err
 		}
 		for _, clientHostname := range clientHostnames {
-			err = client.PowerOff(clientHostname, "main")
-			return err
+			if clientHostname != "" {
+				err = client.PowerOff(clientHostname, "main")
+				return err
+			}
 		}
 		return nil
 	}
@@ -40,11 +42,11 @@ func mainErr() error {
 	if masterHostname != "" {
 		err := client.PowerOn(masterHostname, *masterZone)
 		if err != nil {
+			return err
 		}
-		return err
 	}
 
-	if len(clientHostnames) > 0 {
+	if len(clientHostnames) > 1 || clientHostnames[0] != "" {
 		err := client.Link(masterHostname, clientHostnames)
 		if err != nil {
 
