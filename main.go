@@ -20,34 +20,40 @@ func mainErr() error {
 	logger := log.New()
 	flag.Parse()
 
-	musiccastClient := musiccastClient.New(logger)
+	client := musiccastClient.New(logger)
 
 	clientHostnames := strings.Split(strings.ReplaceAll(*clients, "http://", ""), ",")
 	masterHostname := strings.ReplaceAll(*master, "http://", "")
 
 	if *standby {
-		err := musiccastClient.PowerOff(masterHostname, *masterZone)
+		err := client.PowerOff(masterHostname, *masterZone)
 		if err != nil {
 			return err
 		}
 		for _, clientHostname := range clientHostnames {
-			err = musiccastClient.PowerOff(clientHostname, "main")
+			err = client.PowerOff(clientHostname, "main")
 			return err
 		}
 		return nil
 	}
 
-	err := musiccastClient.PowerOn(masterHostname, *masterZone)
-	if err != nil {
+	if masterHostname != "" {
+		err := client.PowerOn(masterHostname, *masterZone)
+		if err != nil {
+		}
 		return err
 	}
-	err = musiccastClient.Link(masterHostname, clientHostnames)
-	if err != nil {
+
+	if len(clientHostnames) > 0 {
+		err := client.Link(masterHostname, clientHostnames)
+		if err != nil {
+
+		}
 		return err
 	}
 
 	if len(*masterInput) > 0 {
-		err = musiccastClient.ChangeInput(masterHostname, *masterZone, *masterInput)
+		err := client.ChangeInput(masterHostname, *masterZone, *masterInput)
 		if err != nil {
 			return err
 		}
